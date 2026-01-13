@@ -2,17 +2,15 @@ import subprocess
 import time
 
 # 指令列表
-sub_index = 8
-dataset_name = 'BNCI2015_001'
-
 commands = [
-    f"CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7,8 python pretrain_main.py --dataset_dir /data1/hust_bciml_eegdata/lmdb/TUEG-lmdb/ --epochs 200"
-    # f"CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7,8 \
-    # python finetune_main.py --downstream_dataset PhysioNet-MI --datasets_dir /data1/hust_bciml_eegdata/lmdb/PhysioNetMI-lmdb/ \
-    # --foundation_dir pretrained_weights/epoch39_loss0.0030975404661148787.pth --num_of_classes 4 --classifier all_patch_reps \
-    # --seed 997"
-    # f"CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7,8 python finetune_main.py --downstream_dataset PhysioNet-MI --datasets_dir /data1/hust_bciml_eegdata/lmdb/PhysioNetMI-lmdb/ --foundation_dir pretrained_weights/epoch199_loss0.0016987128183245659.pth --num_of_classes 4 --classifier all_patch_reps"
+    f"CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7,8 python pretrain_main.py --dataset_dir /data1/hust_bciml_eegdata/lmdb/TUEG-lmdb/ --epochs 200" # 预训练指令
 
+    # 微调PhysioNet-MI指令
+    f"CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7,8 \
+    python finetune_main.py --foundation_dir pretrained_weights/epoch39_loss0.0030975404661148787.pth \
+    --downstream_dataset PhysioNet-MI --datasets_dir /data1/hust_bciml_eegdata/lmdb/PhysioNetMI-lmdb/ \
+    --num_of_classes 4 --classifier all_patch_reps \
+    --seed 997"
 ]
 
 # 重试次数设置
