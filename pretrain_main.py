@@ -44,7 +44,7 @@ def main():
 
     parser.add_argument('--dataset_dir', type=str, default='dataset_dir',
                         help='dataset_dir')
-    parser.add_argument('--model_dir',   type=str,   default='model_dir', help='model_dir')
+    parser.add_argument('--model_dir',   type=str,   default='pretrained_weights', help='pretrained_model_dir')
     params = parser.parse_args()
     print(params)
     setup_seed(params.seed)

@@ -39,7 +39,7 @@ def main():
                         default='/data/datasets/BigDownstream/mental-arithmetic/processed',
                         help='datasets_dir')
     parser.add_argument('--num_of_classes', type=int, default=2, help='number of classes')
-    parser.add_argument('--model_dir', type=str, default='/data/wjq/models_weights/Big/BigFaced', help='model_dir')
+    parser.add_argument('--model_dir', type=str, default='finetune_model_dir', help='finetune_model_dir')
     """############ Downstream dataset settings ############"""
 
     parser.add_argument('--num_workers', type=int, default=16, help='num_workers')
