@@ -41,14 +41,14 @@ pip install -r requirements.txt
 ## 🚢 Pretrain
 You can pretrain the model on our pretraining dataset or your custom pretraining dataset using the following code:
 ```commandline
-python pretrain_main.py
+CUDA_VISIBLE_DEVICES=4 python pretrain_main.py --datasets_dir /home/wengjiayi/data/datasets/BigDownstream/mental-arithmetic/processed --cuda 0 --batch_size 32
 ```
 A pretrained checkpoint on [Hugginface🤗](https://huggingface.co/weighting666/CBraMod).Download and put it in pretrained_weights/.
 
 ## ⛵ Finetune
 You can finetune CBraMod on our selected downstream datasets using the following code:
 ```commandline
-python finetune_main.py
+CUDA_VISIBLE_DEVICES=4 python finetune_main.py --datasets_dir /home/wengjiayi/data/datasets/BigDownstream/mental-arithmetic/processed --foundation_dir /home/wengjiayi/BCIFM-model/github_copy/test/HustBCIFM/pretrained_weights/pretrained_weights.pth --cuda 0 --batch_size 32 --seed 1234
 ```
 
 
