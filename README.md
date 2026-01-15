@@ -1,15 +1,9 @@
 <div align="center">
 
-# CBraMod
+# HustBCIFM
 
 
 _A Criss-Cross Brain Foundation Model for EEG Decoding_
-
-
-[![Paper](https://img.shields.io/badge/arXiv-2412.07236-red)](https://arxiv.org/abs/2412.07236)
-[![Paper](https://img.shields.io/badge/Paper-ICLR-008B8B)](https://openreview.net/forum?id=NPNUHgHF2w)
-[![huggingface](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-FFD21E)](https://huggingface.co/weighting666/CBraMod)
-![GitHub Repo stars](https://img.shields.io/github/stars/wjq-learning/CBraMod)
 
 </div>
 
@@ -27,37 +21,29 @@ _A Criss-Cross Brain Foundation Model for EEG Decoding_
     | 🚀&nbsp;<a href="#-quick-start">Quick Start</a>
     | 🔗&nbsp;<a href="#-citation">Citation</a>
 </p>
-🔥 NEWS: Thanks to over 100 stars! We've further refined the code for improved stability. Appreciate your patience as we refine the implementation — ongoing EEG research continues to shape the development of a standardized pipeline.
-
-🔥 NEWS: The paper "_CBraMod: A Criss-Cross Brain Foundation Model for EEG Decoding_" has been accepted by ICLR 2025!
 
 ## 🔍 About
-We propose **CBraMod**, a novel EEG foundation model, for EEG decoding on various clinical and BCI application.
-The preprint version of our paper is available at [arXiv](https://arxiv.org/abs/2412.07236). 
-The camera-ready version of the paper will be available at [OpenReview](https://openreview.net/forum?id=NPNUHgHF2w).
+A novel EEG foundation model, for EEG decoding on various clinical and BCI application.
 <div align="center">
-<img src="figure/model.png" style="width:100%;" />
+
 </div>
 
 
 
 ## 🔨 Setup
-Install [Python](https://www.python.org/downloads/).
-
-Install [PyTorch](https://pytorch.org/get-started/locally/).
-
-Install other requirements:
+example:
 ```commandline
+conda create -n HUSTBCI python=3.10
+pip install torch==1.12.1+cu116 torchvision==0.13.1+cu116 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu116
 pip install -r requirements.txt
-``` 
-
+```
 
 ## 🚢 Pretrain
-You can pretrain CBraMod on our pretraining dataset or your custom pretraining dataset using the following code:
+You can pretrain the model on our pretraining dataset or your custom pretraining dataset using the following code:
 ```commandline
 python pretrain_main.py
 ```
-We have released a pretrained checkpoint on [Hugginface🤗](https://huggingface.co/weighting666/CBraMod).
+A pretrained checkpoint on [Hugginface🤗](https://huggingface.co/weighting666/CBraMod).Download and put it in pretrained_weights/.
 
 ## ⛵ Finetune
 You can finetune CBraMod on our selected downstream datasets using the following code:
@@ -100,19 +86,3 @@ logits = classifier(model(mock_eeg))
 
 ## 🔗 Citation
 If you're using this repository in your research or applications, please cite using the following BibTeX:
-```bibtex
-@inproceedings{wang2025cbramod,
-    title={{CB}raMod: A Criss-Cross Brain Foundation Model for {EEG} Decoding},
-    author={Jiquan Wang and Sha Zhao and Zhiling Luo and Yangxuan Zhou and Haiteng Jiang and Shijian Li and Tao Li and Gang Pan},
-    booktitle={The Thirteenth International Conference on Learning Representations},
-    year={2025},
-    url={https://openreview.net/forum?id=NPNUHgHF2w}
-}
-```
-
-## ⭐ Star History
-<div align="center">
-    <a href="https://star-history.com/#wjq-learning/CBraMod&Date">
-        <img src="https://api.star-history.com/svg?repos=wjq-learning/CBraMod&type=Date" style="width: 80%;" />
-    </a>
-</div>
