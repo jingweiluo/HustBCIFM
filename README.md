@@ -34,7 +34,7 @@ A novel EEG foundation model, for EEG decoding on various clinical and BCI appli
 example:
 ```commandline
 conda create -n HUSTBCI python=3.10
-pip install torch==1.12.1+cu116 torchvision==0.13.1+cu116 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu116
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
 pip install -r requirements.txt
 ```
 
