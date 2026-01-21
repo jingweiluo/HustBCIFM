@@ -5,7 +5,7 @@ from torch.nn import MSELoss
 from torchinfo import summary
 from tqdm import tqdm
 
-from utils.util import generate_mask
+from utils.util import generate_mask, save_loss_curve
 
 
 class Trainer(object):
@@ -57,39 +57,46 @@ class Trainer(object):
 
     def train(self):
         best_loss = 10000
-        for epoch in range(self.params.epochs):
-            losses = []
-            for x in tqdm(self.data_loader, mininterval=10):
-                self.optimizer.zero_grad()
-                x = x.to(self.device)/100
-                if self.params.need_mask:
-                    bz, ch_num, patch_num, patch_size = x.shape
-                    mask = generate_mask(
-                        bz, ch_num, patch_num, mask_ratio=self.params.mask_ratio, device=self.device,
-                    )
-                    y = self.model(x, mask=mask)
-                    masked_x = x[mask == 1]
-                    masked_y = y[mask == 1]
-                    loss = self.criterion(masked_y, masked_x)
+        epoch_losses = []
+        try:
+            for epoch in range(self.params.epochs):
+                losses = []
+                for x in tqdm(self.data_loader, mininterval=10):
+                    self.optimizer.zero_grad()
+                    x = x.to(self.device)/100
+                    if self.params.need_mask:
+                        bz, ch_num, patch_num, patch_size = x.shape
+                        mask = generate_mask(
+                            bz, ch_num, patch_num, mask_ratio=self.params.mask_ratio, device=self.device,
+                        )
+                        y = self.model(x, mask=mask)
+                        masked_x = x[mask == 1]
+                        masked_y = y[mask == 1]
+                        loss = self.criterion(masked_y, masked_x)
 
-                    # non_masked_x = x[mask == 0]
-                    # non_masked_y = y[mask == 0]
-                    # non_masked_loss = self.criterion(non_masked_y, non_masked_x)
-                    # loss = 0.8 * masked_loss + 0.2 * non_masked_loss
-                else:
-                    y = self.model(x)
-                    loss = self.criterion(y, x)
-                loss.backward()
-                if self.params.clip_value > 0:
-                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.params.clip_value)
-                self.optimizer.step()
-                self.optimizer_scheduler.step()
-                losses.append(loss.data.cpu().numpy())
-            mean_loss = np.mean(losses)
-            learning_rate = self.optimizer.state_dict()['param_groups'][0]['lr']
-            print(f'Epoch {epoch+1}: Training Loss: {mean_loss:.6f}, Learning Rate: {learning_rate:.6f}')
-            if  mean_loss < best_loss:
-                model_path = rf'{self.params.model_dir}/epoch{epoch+1}_loss{mean_loss}.pth'
-                torch.save(self.model.state_dict(), model_path)
-                print("model save in " + model_path)
-                best_loss = mean_loss
+                        # non_masked_x = x[mask == 0]
+                        # non_masked_y = y[mask == 0]
+                        # non_masked_loss = self.criterion(non_masked_y, non_masked_x)
+                        # loss = 0.8 * masked_loss + 0.2 * non_masked_loss
+                    else:
+                        y = self.model(x)
+                        loss = self.criterion(y, x)
+                    loss.backward()
+                    if self.params.clip_value > 0:
+                        torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.params.clip_value)
+                    self.optimizer.step()
+                    self.optimizer_scheduler.step()
+                    losses.append(loss.data.cpu().numpy())
+                mean_loss = np.mean(losses)
+                epoch_losses.append(mean_loss)
+                learning_rate = self.optimizer.state_dict()['param_groups'][0]['lr']
+                print(f'Epoch {epoch+1}: Training Loss: {mean_loss:.6f}, Learning Rate: {learning_rate:.6f}')
+                if mean_loss < best_loss:
+                    model_path = rf'{self.params.model_dir}/epoch{epoch+1}_loss{mean_loss}.pth'
+                    torch.save(self.model.state_dict(), model_path)
+                    print("model save in " + model_path)
+                    best_loss = mean_loss
+        finally:
+            # 无论正常结束还是 KeyboardInterrupt，都画已经完成的 epoch
+            if len(epoch_losses) > 0:
+                save_loss_curve(epoch_losses, self.params.model_dir)
